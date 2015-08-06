@@ -1,0 +1,32 @@
+data:
+    build: ./data
+    volumes:
+      - /data:/data
+
+mysql:
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    volumes_from:
+      - data
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes_from:
+      - data
+
+php:
+    build: ./php
+    ports:
+      - "9000:9000"
+    links:
+      - "mysql"
+    volumes_from:
+      - data
+    dns: 
+      - 223.5.5.5
+      - 114.114.114.114
